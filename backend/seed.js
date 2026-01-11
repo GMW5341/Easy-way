@@ -1,7 +1,15 @@
 const bcrypt = require('bcrypt');
-const { db } = require('./database');
+const { db, initDatabase } = require('./database');
 
 async function seed() {
+  console.log('Initializing database...');
+
+  // Initialize database tables first
+  await new Promise((resolve) => {
+    initDatabase();
+    setTimeout(resolve, 1000);
+  });
+
   console.log('Seeding database...');
 
   // Create admin user
