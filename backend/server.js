@@ -23,7 +23,26 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // Initialize database
-initDatabase();
+initDatabase(); 
+const bcrypt = require('bcrypt');
+const { db } = require('./database');
+
+(async () => {
+  const adminPassword = process.env.ADMIN_PASSWORD;
+  if (!adminPassword) return;
+
+  const hashed = await bcrypt.hash(adminPassword, 10);
+
+  db.run(
+    `
+    INSERT INTO users (username, password, name, role)
+    VALUES ('admin', ?, '관리자', 'admin')
+    ON CONFLICT(username)
+    DO UPDATE SET password=excluded.password
+    `,
+    [hashed]
+  );
+})();
 ensureAdminUser();
 
 // Routes
