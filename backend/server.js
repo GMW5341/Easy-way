@@ -2,7 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
-const { initDatabase } = require('./database');
+const { initDatabase, ensureAdminUser } = require('./database');
 
 // Import routes
 const authRoutes = require('./routes/auth');
@@ -15,7 +15,7 @@ const paymentRoutes = require('./routes/payments');
 const scheduleChangeRoutes = require('./routes/schedule-changes');
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5001;
 
 // Middleware
 app.use(cors());
@@ -24,6 +24,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 // Initialize database
 initDatabase();
+ensureAdminUser();
 
 // Routes
 app.use('/api/auth', authRoutes);
