@@ -43,7 +43,6 @@ const { db } = require('./database');
     [hashed]
   );
 })();
-ensureAdminUser();
 
 // Routes
 app.use('/api/auth', authRoutes);
